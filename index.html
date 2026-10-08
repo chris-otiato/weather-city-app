@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Weather</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js"></script>
+</head>
+
+<!--====================================================================== 
+                                HEADER
+    ======================================================================-->
+<body>
+  <header class="site-header">
+
+  <!-- Weather icon and title -->
+  <div class="header-title">
+    <img src="images/weather-icon.png" alt="Weather icon" class="weather-icon" width="40" height="40">
+    <h1>City Weather</h1>
+  </div>
+  <p>Search a location and check its forecast</p>
+
+</header>
+
+<!--====================================================================== 
+                                MAIN
+    ======================================================================-->
+
+  <main class="app">
+
+    <!-- Search section: the form and the feedback area -->
+    <section class="card search-card" aria-labelledby="search-heading">
+      <h2 id="search-heading">Find a city</h2>
+      <p>Enter a city name, choose the correct location, and view its current weather and forecast.</p>
+
+      <form id="search-form" novalidate>
+        <label for="city-input">City name</label>
+        <div class="form-row">
+          <input type="text" id="city-input" name="city" placeholder="For example, Kristianstad" autocomplete="off">
+          <button type="submit">Search</button>
+        </div>
+      </form>
+
+      <!-- Loading, empty-state, validation and error messages all appear here -->
+      <p id="status-message" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Matching locations. Hidden until there are results to show -->
+    <section class="card locations-card" id="locations-section" aria-labelledby="locations-heading" hidden>
+      <p class="step-label">Step 1</p>
+      <h2 id="locations-heading">Choose a location</h2>
+      <p id="results-count"></p>
+      <ul id="locations-list" class="locations-list"></ul>
+    </section>
+
+    <!-- Selected location's weather. Hidden until a location is chosen -->
+    <section class="card weather-card" id="weather-section" aria-labelledby="weather-heading" hidden>
+      <p class="step-label">Step 2</p>
+      <h2 id="weather-heading">Weather</h2>
+      <p id="selected-location"></p>
+
+      <div class="weather-layout">
+        <article class="current-weather" aria-labelledby="current-heading">
+          <h3 id="current-heading">Current weather</h3>
+          <div id="current-weather-content"></div>
+        </article>
+
+        <article class="forecast" aria-labelledby="forecast-heading">
+          <h3 id="forecast-heading">Three-day forecast</h3>
+          <ul id="forecast-list" class="forecast-list"></ul>
+        </article>
+      </div>
+    </section>
+
+  </main>
+<!--====================================================================== 
+                                HEADER
+    ======================================================================-->
+  <footer class="site-footer">
+    <p>Weather data provided by Open-Meteo.</p>
+  </footer>
+</body>
+</html>
