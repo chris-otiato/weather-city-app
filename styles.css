@@ -1,0 +1,309 @@
+/* ---------- Base (mobile-first) ---------- */
+/* border-box makes width include padding and border, which keeps sizing predictable */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* The hidden attribute loses to any display rule we write, so enforce it */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: #1f2933;
+  background-color: #eef3f8;
+
+  /* Flexbox: stack header, main, footer vertically.
+     min-height + flex: 1 on main pushes the footer to the bottom. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+/* ---------- Header and footer ---------- */
+.site-header,
+.site-footer {
+  background-color: #1b3a5c;
+  color: #ffffff;
+  padding: 1rem;
+}
+
+.site-header {
+  display: flex;
+  flex-direction: column; /* stacked on mobile */
+  gap: 0.25rem;
+}
+
+.site-header h1 {
+  font-size: 1.5rem;
+}
+
+.site-footer {
+  font-size: 0.875rem;
+}
+
+/* ---------- Header title and weather icon ---------- */
+/* Flexbox: icon and h1 side by side, vertically centred */
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* CSS overrides the width/height attributes in the HTML.
+   flex-shrink: 0 stops the icon being squashed on narrow screens. */
+.weather-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+}
+
+/* ---------- Main layout ---------- */
+/* Grid: one column on mobile, with a gap between cards */
+.app {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-content: start;
+  width: 100%;
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card h2 {
+  font-size: 1.5rem;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f5f99;
+}
+
+/* ---------- Search form ---------- */
+label {
+  font-weight: 700;
+}
+
+/* Flexbox: input grows to fill the row, button keeps its natural size */
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+input[type="text"] {
+  flex: 1;
+  min-width: 0; /* lets the input shrink on narrow screens */
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+}
+
+button {
+  padding: 0.65rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #1f5f99;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #174a77;
+}
+
+/* Visible focus ring: required for keyboard users */
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid #f5a623;
+  outline-offset: 2px;
+}
+
+/* ---------- Status message states ---------- */
+/* JS will add one of these classes to #status-message */
+.status {
+  min-height: 1.5rem;
+  font-weight: 600;
+}
+
+.status--error { color: #b42318; }
+.status--success { color: #1a6b3a; }
+.status--loading { color: #52606d; }
+
+/* ---------- Location results ---------- */
+.locations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  /* Grid: as many columns of at least 14rem as will fit */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.5rem;
+}
+
+/* The select button fills its list item so the whole row is clickable */
+.location-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  text-align: left;
+  color: #1f2933;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+
+.location-button:hover {
+  background-color: #e2ecf6;
+}
+
+.location-name {
+  font-weight: 700;
+}
+
+.location-region {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #52606d;
+}
+
+/* ---------- Weather ---------- */
+/* Grid: one column on mobile */
+.weather-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.current-weather,
+.forecast {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.current-weather h3,
+.forecast h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.current-temp {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.current-condition {
+  font-weight: 700;
+  color: #1f5f99;
+}
+
+.current-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.detail-item {
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #52606d;
+}
+
+.detail-value {
+  font-weight: 700;
+}
+
+/* Forecast: three separate cards, stacked on mobile */
+.forecast-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.forecast-day {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.forecast-date {
+  font-weight: 700;
+}
+
+.forecast-condition,
+.forecast-temps {
+  font-size: 0.9rem;
+}
+
+/* ---------- Desktop layout (1024px and above) ---------- */
+@media (min-width: 1024px) {
+  /* Flexbox: switch header from stacked to side by side */
+  .site-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+
+  /* Grid: two columns, search on the left, results on the right */
+  .app {
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+  }
+
+  /* The weather card spans both columns */
+  .weather-card {
+    grid-column: 1 / -1;
+  }
+
+  /* Current weather on the left, forecast on the right */
+  .weather-layout {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  /* Three forecast cards side by side */
+  .forecast-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
