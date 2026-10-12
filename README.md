@@ -1,8 +1,6 @@
 # City Weather Application
 
-## Frontend Development – Assignment 2
-
-### Project Description
+## Project Description
 
 City Weather Application is a responsive web application that allows users to search for cities and view current weather conditions and a three-day weather forecast.
 
@@ -169,5 +167,3 @@ Kristianstad University, Sweden
 ## Acknowledgements
 
 Weather and location data are provided by [Open-Meteo](https://open-meteo.com/).
-
-This project was developed for educational purposes as part of Frontend Development Assignment 2.
