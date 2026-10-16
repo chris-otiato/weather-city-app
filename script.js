@@ -12,6 +12,11 @@ const locationsSection = document.querySelector("#locations-section");
 const resultsCount = document.querySelector("#results-count");
 const locationsList = document.querySelector("#locations-list");
 const weatherSection = document.querySelector("#weather-section");
+const selectedLocationText = document.querySelector("#selected-location");
+const currentWeatherContent = document.querySelector(
+  "#current-weather-content",
+);
+const forecastList = document.querySelector("#forecast-list");
 
 //A function that prepares the search value
 //Takes in rawValue as a parameter and returns a value the trimmed text(removes white spaces)
@@ -114,6 +119,30 @@ function createWeatherObject(data) {
   };
 }
 
+//Turns a number into text for the page: 17.6 becomes "18°C"
+function formatTemperature(value) {
+  return Math.round(value) + "°C";
+}
+
+//Turns "2026-10-16" into text like "Fri, Oct 16"
+//Adding a time stops the browser treating the date as UTC,
+//which could show the day before in some time zones.
+function formatDate(dateString) {
+  const date = new Date(dateString + "T00:00:00");
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+//Builds the text for the selected place, for example "Kristianstad, Skåne County, Sweden"
+function formatLocationName(location) {
+  return [location.name, location.region, location.country]
+    .filter(Boolean)
+    .join(", ");
+}
+
 function showStatus(message, type) {
   statusMessage.textContent = message;
   statusMessage.className = "status status--" + type;
@@ -157,10 +186,88 @@ function displayLocations(locations) {
   locationsSection.hidden = false; //show the Step 1 card
 }
 
+//Creates one element with a class and some text, and returns it.
+//We use this many times below, so writing it once avoids repeated code.
+function createTextElement(tagName, className, text) {
+  const element = document.createElement(tagName);
+  element.className = className;
+  element.textContent = text;
+  return element;
+}
+
+//Creates one small box, for example "Feels like" and "15°C"
+function createDetailItem(label, value) {
+  const item = document.createElement("div");
+  item.className = "detail-item";
+  item.append(
+    createTextElement("div", "detail-label", label),
+    createTextElement("div", "detail-value", value),
+  );
+  return item;
+}
+
+//Shows the current weather: big temperature, condition, and two detail boxes
+function displayCurrentWeather(current) {
+  const details = document.createElement("div");
+  details.className = "current-details";
+  details.append(
+    createDetailItem(
+      "Feels like",
+      formatTemperature(current.apparentTemperature),
+    ),
+    createDetailItem("Wind speed", Math.round(current.windSpeed) + " km/h"),
+  );
+
+  //replaceChildren removes the old content and puts the new content in
+  currentWeatherContent.replaceChildren(
+    createTextElement(
+      "p",
+      "current-temp",
+      formatTemperature(current.temperature),
+    ),
+    createTextElement("p", "current-condition", current.description),
+    details,
+  );
+}
+
+//Shows one card for each forecast day
+function displayForecast(forecast) {
+  forecastList.replaceChildren(); //remove old forecast cards
+
+  //forEach runs the code once for each of the three days
+  forecast.forEach((day) => {
+    const listItem = document.createElement("li");
+    listItem.className = "forecast-day";
+    listItem.append(
+      createTextElement("p", "forecast-date", formatDate(day.date)),
+      createTextElement("p", "forecast-condition", day.description),
+      createTextElement(
+        "p",
+        "forecast-temps",
+        "Low " +
+          formatTemperature(day.min) +
+          " · High " +
+          formatTemperature(day.max),
+      ),
+    );
+    forecastList.append(listItem);
+  });
+}
+
+//Shows the whole weather card by calling the smaller functions
+function displayWeather(location, weather) {
+  selectedLocationText.textContent = formatLocationName(location);
+  displayCurrentWeather(weather.current);
+  displayForecast(weather.forecast);
+  weatherSection.hidden = false; //show the Step 2 card
+}
+
 //Runs when the user clicks a location button.
 //"location" is our own object, so it contains the latitude and longitude.
 async function handleLocationSelect(location) {
   showStatus(`Loading weather for ${location.name}...`, "loading");
+
+  weatherSection.hidden = true;
 
   try {
     const weatherData = await getWeatherData(
@@ -169,8 +276,7 @@ async function handleLocationSelect(location) {
     );
     const weather = createWeatherObject(weatherData);
 
-    //Temporary: look at our processed object in the Console
-    console.log(weather);
+    displayWeather(location, weather);
     showStatus(`Weather loaded for ${location.name}.`, "success");
   } catch (error) {
     console.error(error); //temporary: remove later
