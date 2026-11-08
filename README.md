@@ -167,3 +167,7 @@ Kristianstad University, Sweden
 ## Acknowledgements
 
 Weather and location data are provided by [Open-Meteo](https://open-meteo.com/).
+
+## Live Website
+
+🌤️ [View City Weather App](https://chris-otiato.github.io/weather-city-app/)
